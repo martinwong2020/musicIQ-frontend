@@ -118,7 +118,7 @@ function Game() {
   return (
     <Container style={{ textAlign: 'center', marginTop: '50px' }}>
       <div style={{ display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <ReactLoading type="bars" color="orange" height={80} width={80} />
+        <ReactLoading type="bars" color="#388e3c" height={80} width={80} />
       </div>
       <Box sx={{display:searchedArtist? 'none':'block'}}>
         <TextField id="outlined-basic" label="Artist" variant='outlined' onChange={(e)=>{setArtist(e.target.value)}}/>
@@ -133,7 +133,7 @@ function Game() {
             <source src={quizSong[songIndex].preview} type="audio/mpeg"/>
             
           </audio>
-          <h1>{quizSong[songIndex]["title"]}</h1>
+          {/* <h1>{quizSong[songIndex]["title"]}</h1> */}
         </Box>
       )}
       

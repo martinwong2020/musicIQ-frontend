@@ -9,13 +9,8 @@ function Home() {
     const navigate = useNavigate();
     return (
         <div style={{backgroundColor:'#161616', height:'100vh', width:'100vw', margin:0, display:'flex', justifyContent:'center', alignItems:'center'}}>
-        {/* <AppBar position="static">
-            <Toolbar>
-            <Typography variant="h6">Music Nerd Clone</Typography>
-            </Toolbar>
-        </AppBar> */}
             <Container style={{ textAlign: 'center'}}>
-                <Typography variant="h4" gutterBottom sx={{color:'#e6e6e6', fontFamily:'Oswald', fontOpticalSizing:'auto', fontWeight:'530', fontSize:'3.5em'}}>Welcome to Music<span style={{color:"#b3eeb3"}}>IQ</span></Typography>
+                <Typography variant="h4" gutterBottom sx={{color:'#e6e6e6', fontFamily:'Oswald', fontOpticalSizing:'auto', fontWeight:'530', fontSize:'3.5em'}}>Welcome to Music<span style={{color:"#4caf50"}}>IQ</span></Typography>
 
                 <Box
                     display="flex"
