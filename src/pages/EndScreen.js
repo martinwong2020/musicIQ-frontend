@@ -1,11 +1,16 @@
+import { Button , Box} from '@mui/material';
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function EndScreen() {
     const location = useLocation();
+    const navigate = useNavigate();
     const {score} = location.state || {};
     return (
-        <div>Score : {score}</div>
+        <Box>
+            <div>Score : {score}</div>
+            <Button variant='contained' onClick={()=>{navigate('/')}}>Play again</Button>
+        </Box>
     )
 }
 

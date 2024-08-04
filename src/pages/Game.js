@@ -21,6 +21,7 @@ function Game() {
   const [selectedChoice, setSelectedChoice]= useState(null); 
   const [searchedArtist, setSearchedArtist] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [insufficientSongs, setInsufficientSongs] = useState(false);
   const audioRef = useRef(null);
   const navigate = useNavigate();
   const fetchArtist = async () =>{
@@ -35,11 +36,20 @@ function Game() {
   }
   const parseSongList = () =>{
     console.log("songs",songs);
+    if(songs.length<30){
+      setQuizSong(songs.slice(0,10));
+      setRemainingSong(songs.slice(1));
+      return;
+    }
     setQuizSong(songs.slice(0,10));
     setRemainingSong(songs.slice(10));
     
   }
   const fetchSongs = async () => {
+    if(artist==''){
+      return;
+    }
+    setSearchedArtist(true);
     setLoading(true);
       try {
           // Fetch artist ID
@@ -52,8 +62,17 @@ function Game() {
 
           // Fetch top 10 tracks for the artist
           const tracksResponse = await axios.get(`http://localhost:5000/artist/${artistId}/random`);
+          if(tracksResponse.data.length<15){
+            // setError("Less than 15 songs");
+            setInsufficientSongs(true);
+            console.log("less than 15songs");
+            setSearchedArtist(false);
+            setLoading(false);
+            return;
+          }
           setSongs(tracksResponse.data);
           setError('');
+          setInsufficientSongs(false);
       } catch (error) {
           console.error("Error fetching songs:", error);
           setError('Error fetching songs');
@@ -103,7 +122,10 @@ function Game() {
       </div>
       <Box sx={{display:searchedArtist? 'none':'block'}}>
         <TextField id="outlined-basic" label="Artist" variant='outlined' onChange={(e)=>{setArtist(e.target.value)}}/>
-        <Button variant='contained' onClick={()=>{fetchSongs(); setSearchedArtist(true);}}>Search</Button>
+        <Button variant='contained' onClick={()=>{fetchSongs();}}>Search</Button>
+      </Box>
+      <Box sx={{display:insufficientSongs ? 'block' :'none'}}>
+        <h1>Sorry the following artist you have searched has less than 15 songs to be used for the game. Please try again with a new artist.</h1>
       </Box>
       {quizSong.length!=0 &&(
         <Box>

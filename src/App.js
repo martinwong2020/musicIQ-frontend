@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.js';
 import Game from './pages/Game.js';
 import EndScreen from './pages/EndScreen.js';
+
 function App() {
   return (
     <Router>
