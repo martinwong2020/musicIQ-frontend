@@ -6,9 +6,16 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import ReactLoading from 'react-loading';
-import { useNavigate } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../css/style.css'
+import { connectSocket } from './socket';
+import { fetchArtist } from './ApiHelper';
 function Game() {
+  const location = useLocation();
+  const audioRef = useRef(null);
+  const navigate = useNavigate();
+
+  const passedArtist = location.state?.artist
   const [artist, setArtist]=useState('');
   const [songs,setSongs]=useState([]);
   const [quizSong,setQuizSong] = useState([]);
@@ -22,18 +29,8 @@ function Game() {
   const [searchedArtist, setSearchedArtist] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [insufficientSongs, setInsufficientSongs] = useState(false);
-  const audioRef = useRef(null);
-  const navigate = useNavigate();
-  const fetchArtist = async () =>{
-    try{
-        const artistResponse = await axios.get(`http://localhost:5000/search/artist?artist=${artist}`);
-        const artistId = artistResponse.data.data[0]?.id;
-        return artistId;
-    }
-    catch (error){
-        console.log("error in fetch artist",error);
-    }
-  }
+  
+  
   const parseSongList = () =>{
     console.log("songs",songs);
     if(songs.length<30){
@@ -53,7 +50,7 @@ function Game() {
     setLoading(true);
       try {
           // Fetch artist ID
-          const artistId = await fetchArtist();
+          const artistId = await fetchArtist(artist);
 
           if (!artistId) {
               setError('Artist not found');
@@ -114,15 +111,54 @@ function Game() {
       console.log("preview",quizSong[songIndex].preview);
     }
   },[quizSong]);
-  
   return (
-    <Container style={{ textAlign: 'center', marginTop: '50px' }}>
+    <Box sx={{
+      textAlign: 'center',
+      height: '100vh',
+      width: '100vw',
+      backgroundColor: '#161616',
+      margin: '0',
+      padding: '0',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      justifySelf:'center',
+      alignSelf:'center',
+      alignItems: 'center'
+    }}>
       <div style={{ display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <ReactLoading type="bars" color="#388e3c" height={80} width={80} />
       </div>
-      <Box sx={{display:searchedArtist? 'none':'block'}}>
-        <TextField id="outlined-basic" label="Artist" variant='outlined' onChange={(e)=>{setArtist(e.target.value)}}/>
-        <Button variant='contained' onClick={()=>{fetchSongs();}}>Search</Button>
+      <Box sx={{display:searchedArtist? 'none':'flex', flexDirection:'column'}}>
+        <TextField id="outlined-basic" label="Artist" variant='standard' onChange={(e)=>{setArtist(e.target.value)}}
+          sx={{
+            '& .MuiInputBase-input': {
+              color: 'white',
+            },
+            '& .MuiInputLabel-root': {
+              color: 'white',
+            },
+            '& .MuiInput-underline:before': {
+              borderBottomColor: 'white',
+            },
+            '& .MuiInput-underline:hover:before': {
+              borderBottomColor: 'white',
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: 'white',
+            },
+          }} 
+        />
+        <Button variant='contained' onClick={()=>{fetchSongs();}} 
+          sx={{backgroundColor: '#4caf50',
+            maxWidth:'100px',
+            marginTop:'10px',
+            alignSelf:'center',
+            color: 'white',
+            '&:hover': {
+                backgroundColor: '#388e3c', // Darker green on hover
+          },}}
+        >Search</Button>
       </Box>
       <Box sx={{display:insufficientSongs ? 'block' :'none'}}>
         <h1>Sorry the following artist you have searched has less than 15 songs to be used for the game. Please try again with a new artist.</h1>
@@ -137,9 +173,9 @@ function Game() {
         </Box>
       )}
       
-      <Box width="80%" backgroundColor="black" alignItems="center">
+      <Box backgroundColor="black" alignItems="center">
         {songs.length!=0 && quizSong.length!=0 && remaingingSong.length!=0 &&(
-          <Box display="flex" width="80%" alignItems="center">
+          <Box display="flex" alignItems="center" >
             {songChoices.map((song,index)=>(
               <Card 
                 key={index} 
@@ -167,7 +203,7 @@ function Game() {
         )}    
         <Button variant='contained'sx={{display: (selectedChoice!=null) ? 'block':'none'}} onClick={()=>{resetChoices()}}>Continue</Button>
       </Box>
-    </Container>
+    </Box>
   )
 }
 

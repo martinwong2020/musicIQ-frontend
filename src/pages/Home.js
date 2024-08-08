@@ -27,7 +27,7 @@ function Home() {
                                 backgroundColor: '#388e3c', // Darker green on hover
                             },}}
                         >Single Player</Button>
-                        <Button variant='contained'
+                        <Button variant='contained' onClick= {()=>{navigate("/gamelobby")}}
                             sx={{backgroundColor: '#4caf50',
                                 color: 'white',
                                 '&:hover': {
@@ -40,6 +40,7 @@ function Home() {
                                 '&:hover': {
                                     backgroundColor: '#388e3c', // Darker green on hover
                                 },}}
+                            onClick={()=>{navigate('/waitingroom')}}
                         >Join Room</Button>
                 </Box>
             </Container>
