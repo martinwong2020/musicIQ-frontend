@@ -12,11 +12,11 @@ export const disconnectSocket = () =>{
     })
 }
 
-export const joinRoom = (room)=>{
-    socket.emit("joinRoom",room);
+export const joinRoom = (room,username)=>{
+    socket.emit("joinRoom",{room,username});
 }
-export const hostRoom = (room)=>{
-    socket.emit("hostRoom",room);
+export const hostRoom = (room,username)=>{
+    socket.emit("hostRoom",{room,username});
 }
 // export const sendChoice = (choice, room) =>{
 //     socket.emit("answerChoice",{choice,room});

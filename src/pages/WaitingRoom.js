@@ -9,7 +9,17 @@ function WaitingRoom() {
     const [inLobby,setInLobby] = useState(1);
     const [joinStatus, setJoinStatus] = useState(false);
     const [gameStarted,setGameStarted]=useState(false);
-    
+    const [username, setUsername] = useState('');
+
+    const checkField = ()=>{
+        if(room==""){
+            return;
+        }
+        if(username==""){
+            return;
+        }
+        joinRoom(room,username);
+    }
     useEffect(()=>{
         socket.on("roomPopulation",(count)=>{
             setInLobby(count);
@@ -72,6 +82,29 @@ function WaitingRoom() {
                     display:joinStatus?'none':'block'
                 }} 
             />
+             <TextField id="outlined-basic" label="Username" variant='standard' onChange={(e)=>{setUsername(e.target.value)}}
+                sx={{
+                    '& .MuiInputBase-input': {
+                    color: 'white',
+                    },
+                    '& .MuiInputLabel-root': {
+                    color: 'white',
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                        color: 'white',
+                    },
+                    '& .MuiInput-underline:before': {
+                    borderBottomColor: 'white',
+                    },
+                    '& .MuiInput-underline:hover:before': {
+                    borderBottomColor: 'white',
+                    },
+                    '& .MuiInput-underline:after': {
+                    borderBottomColor: 'white',
+                    },
+                    display:joinStatus?'none':'block'
+                }} 
+            />
             <Button variant='contained'
                 sx={{backgroundColor: '#4caf50',
                     color: 'white',
@@ -80,7 +113,7 @@ function WaitingRoom() {
                     },
                     display:joinStatus?'none':'block'
                 }}
-                onClick={()=>{joinRoom(room);}}
+                onClick={()=>{checkField();}}
             >Join Room</Button>
             <Box sx={{display:joinStatus? 'block':'none'}}>
                  <h1 style={{color:'white'}}>Waiting for the HOST to start game.</h1>

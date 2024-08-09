@@ -18,6 +18,7 @@ function GameLobby() {
     const [error, setError]=useState('');
     const [insufficientSongs, setInsufficientSongs] = useState(false);
     const [gameStarted,setGameStarted]=useState(false);
+    const [username, setUsername] = useState('');
 
     const fetchGameQuestions = async () =>{
         setLoading(true);
@@ -70,14 +71,6 @@ function GameLobby() {
         checkRoomAvailability((data)=>{
             setHostStatus(data);
         })
-        // socket.on("startGame", (data) => {
-        //     console.log("Received startGame:", data);
-        //     setGameStarted(data);
-        //     if (data) {
-        //         console.log("room",room);
-        //         navigate("/multiplayer",{state:{room:room}});
-        //     }
-        // });
     },[]);
     useEffect(() => {
         socket.on("startGame", (data) => {
@@ -101,7 +94,11 @@ function GameLobby() {
             setFieldError(true);
             return;
         }
-        hostRoom(room);
+        if(username==""){
+            setFieldError(true);
+            return;
+        }
+        hostRoom(room,username);
         fetchGameQuestions();
     }
     return (
@@ -153,6 +150,29 @@ function GameLobby() {
                     }} 
                 />
                 <TextField id="outlined-basic" label="Artist" variant='standard' onChange={(e)=>{setArtist(e.target.value)}}
+                    sx={{
+                        '& .MuiInputBase-input': {
+                        color: 'white',
+                        },
+                        '& .MuiInputLabel-root': {
+                        color: 'white',
+                        },
+                        '& .MuiInputLabel-root.Mui-focused': {
+                            color: 'white',
+                        },
+                        '& .MuiInput-underline:before': {
+                        borderBottomColor: 'white',
+                        },
+                        '& .MuiInput-underline:hover:before': {
+                        borderBottomColor: 'white',
+                        },
+                        '& .MuiInput-underline:after': {
+                        borderBottomColor: 'white',
+                        },
+                        marginTop:'20px'
+                    }} 
+                />
+                <TextField id="outlined-basic" label="Username" variant='standard' onChange={(e)=>{setUsername(e.target.value)}}
                     sx={{
                         '& .MuiInputBase-input': {
                         color: 'white',
