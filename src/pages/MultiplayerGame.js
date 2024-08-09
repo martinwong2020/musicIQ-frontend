@@ -15,6 +15,20 @@ function MultiplayerGame() {
     const [correctSong,setCorrectSong] = useState([]);
     const [selectedChoice, setSelectedChoice]= useState(null); 
     const [correctChoice, setCorrectChoice] = useState(null);
+
+    useEffect(() => {
+        const handleBeforeUnload = (event) => {
+          event.preventDefault();
+          event.returnValue = ''; 
+        };
+      
+        window.addEventListener('beforeunload', handleBeforeUnload);
+      
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     const checkSongChoice = (song,index) =>{
         console.log("song choice",song, correctSong["title"])
         if(selectedChoice!=null){

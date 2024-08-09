@@ -16,21 +16,86 @@ function Game() {
   const navigate = useNavigate();
 
   const passedArtist = location.state?.artist
-  const [artist, setArtist]=useState('');
-  const [songs,setSongs]=useState([]);
-  const [quizSong,setQuizSong] = useState([]);
-  const [remaingingSong, setRemainingSong]= useState([]);
-  const [error, setError]=useState('');
-  const [loading, setLoading] = useState(false);
-  const [songIndex,setSongIndex]=useState(0);
-  const [songChoices,setSongChoices]=useState([]);
-  const [correctChoice, setCorrectChoice]= useState(null);
-  const [selectedChoice, setSelectedChoice]= useState(null); 
-  const [searchedArtist, setSearchedArtist] = useState(false);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
-  const [insufficientSongs, setInsufficientSongs] = useState(false);
+  // const [artist, setArtist]=useState('');
+  // const [songs,setSongs]=useState([]);
+  // const [quizSong,setQuizSong] = useState([]);
+  // const [remaingingSong, setRemainingSong]= useState([]);
+  // const [error, setError]=useState('');
+  // const [loading, setLoading] = useState(false);
+  // const [songIndex,setSongIndex]=useState(0);
+  // const [songChoices,setSongChoices]=useState([]);
+  // const [correctChoice, setCorrectChoice]= useState(null);
+  // const [selectedChoice, setSelectedChoice]= useState(null); 
+  // const [searchedArtist, setSearchedArtist] = useState(false);
+  // const [correctAnswers, setCorrectAnswers] = useState(0);
+  // const [insufficientSongs, setInsufficientSongs] = useState(false);
+
+  const savedState = JSON.parse(sessionStorage.getItem('quizState')) || {};
+
+  const [artist, setArtist] = useState(savedState.artist || '');
+  const [songs, setSongs] = useState(savedState.songs || []);
+  const [quizSong, setQuizSong] = useState(savedState.quizSong || []);
+  const [remaingingSong, setRemainingSong] = useState(savedState.remaingingSong || []);
+  const [error, setError] = useState(savedState.error || '');
+  const [loading, setLoading] = useState(savedState.loading || false);
+  const [songIndex, setSongIndex] = useState(savedState.songIndex || 0);
+  const [songChoices, setSongChoices] = useState(savedState.songChoices || []);
+  const [correctChoice, setCorrectChoice] = useState(savedState.correctChoice || null);
+  const [selectedChoice, setSelectedChoice] = useState(savedState.selectedChoice || null);
+  const [searchedArtist, setSearchedArtist] = useState(savedState.searchedArtist || false);
+  const [correctAnswers, setCorrectAnswers] = useState(savedState.correctAnswers || 0);
+  const [insufficientSongs, setInsufficientSongs] = useState(savedState.insufficientSongs || false);
   
-  
+  // useEffect(() => {
+  //   const savedState = JSON.parse(sessionStorage.getItem('quizState'));
+  //   if (savedState) {
+  //       setArtist(savedState.artist);
+  //       setSongs(savedState.songs);
+  //       setQuizSong(savedState.quizSong);
+  //       setRemainingSong(savedState.remaingingSong);
+  //       setError(savedState.error);
+  //       setLoading(savedState.loading);
+  //       setSongIndex(savedState.songIndex);
+  //       setSongChoices(savedState.songChoices);
+  //       setCorrectChoice(savedState.correctChoice);
+  //       setSelectedChoice(savedState.selectedChoice);
+  //       setSearchedArtist(savedState.searchedArtist);
+  //       setCorrectAnswers(savedState.correctAnswers);
+  //       setInsufficientSongs(savedState.insufficientSongs);
+  //   }
+  // }, []);
+  useEffect(() => {
+    const state = {
+        artist,
+        songs,
+        quizSong,
+        remaingingSong,
+        error,
+        loading,
+        songIndex,
+        songChoices,
+        correctChoice,
+        selectedChoice,
+        searchedArtist,
+        correctAnswers,
+        insufficientSongs
+    };
+    sessionStorage.setItem('quizState', JSON.stringify(state));
+  }, [
+        artist, 
+        songs, 
+        quizSong, 
+        remaingingSong, 
+        error, 
+        loading, 
+        songIndex, 
+        songChoices, 
+        correctChoice, 
+        selectedChoice, 
+        searchedArtist, 
+        correctAnswers, 
+        insufficientSongs
+  ]);
   const parseSongList = () =>{
     console.log("songs",songs);
     if(songs.length<30){
@@ -111,6 +176,7 @@ function Game() {
       console.log("preview",quizSong[songIndex].preview);
     }
   },[quizSong]);
+
   return (
     <Box sx={{
       textAlign: 'center',

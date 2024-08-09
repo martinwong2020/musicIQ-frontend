@@ -8,45 +8,13 @@ function EndScreen() {
     const {score} = location.state || {};
     const {multiscore} = location.state || {};
     const [playersScore, setPlayersScore] = useState([])
-    // {
-    //     "playerAnswers": {
-    //         "RxcY04QmMqFG7Q2LAAAL": [
-    //             false,
-    //             true,
-    //             true,
-    //             true,
-    //             false,
-    //             false,
-    //             true,
-    //             true,
-    //             false,
-    //             true
-    //         ],
-    //         "1xLdyxRQR32cOP1WAAAN": [
-    //             false,
-    //             false,
-    //             false,
-    //             false,
-    //             true,
-    //             true,
-    //             false,
-    //             false,
-    //             false,
-    //             false
-    //         ]
-    //     },
-    //     "players": {
-    //         "RxcY04QmMqFG7Q2LAAAL": "a",
-    //         "1xLdyxRQR32cOP1WAAAN": "b"
-    //     }
-    // }
     const calculateScore = () =>{
-        if(Object.keys(multiscore).length==0){
+        if (!multiscore || Object.keys(multiscore).length === 0) {
             return;
         }
         const players ={};
-        for(const [id,username] of Object.entries(multiscore["players"])){
-            const responses = multiscore["playerAnswers"][id];
+        for (const [id, username] of Object.entries(multiscore.players || {})) {
+            const responses = multiscore.playerAnswers?.[id] || [];
             const score = responses.filter(answer => answer === true).length;
             players[username]=score;
         }
@@ -58,7 +26,7 @@ function EndScreen() {
     useEffect(()=>{
         console.log("this is multi score",multiscore);
         calculateScore();
-    },[multiscore])
+    },[multiscore]);
     return (
         <Box sx={{
             textAlign: 'center',
@@ -73,9 +41,14 @@ function EndScreen() {
             justifySelf:'center',
             alignSelf:'center',
             alignItems: 'center'}}
-        >
+        >   
+            {score &&(
+                <Box>
+                    <h1 style={{color:'white'}}>Score :{score}</h1>
+                </Box>
+            )}
             {/* <div>Score : {score}</div> */}
-            {Object.keys(multiscore).length!=0 &&(
+            {multiscore && Object.keys(multiscore).length !== 0 && (
                 <Box>
                     <ol>
                         {playersScore.length !== 0 && playersScore.map((score, index) => (
@@ -95,7 +68,7 @@ function EndScreen() {
                     </ol>
                 </Box>
             )}
-            <Button variant='contained' onClick={()=>{navigate('/')}}>Play again</Button>
+            <Button variant='contained' onClick={()=>{navigate('/');sessionStorage.clear();}}>Play again</Button>
         </Box>
         
     )
