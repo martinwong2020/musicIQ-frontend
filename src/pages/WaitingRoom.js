@@ -1,7 +1,8 @@
 import { Box, TextField, Button } from '@mui/material'
 import React, { useState, useEffect } from 'react'
-import { checkRoomExist, joinRoom, socket } from './socket';
+import { checkRoomExist, joinRoom, socket, receivePlayers } from './socket';
 import { useNavigate } from 'react-router-dom';
+import GenerateAvatar from './GenerateAvatar';
 
 function WaitingRoom() {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ function WaitingRoom() {
     const [joinStatus, setJoinStatus] = useState(false);
     const [gameStarted,setGameStarted]=useState(false);
     const [username, setUsername] = useState('');
+    const [players,setPlayers] = useState({});
 
     const checkField = ()=>{
         if(room==""){
@@ -27,6 +29,10 @@ function WaitingRoom() {
         checkRoomExist((data)=>{
             setJoinStatus(data);
         })
+        receivePlayers((data)=>{
+            console.log("players",data);
+            setPlayers(data);
+        });
     },[]);
     useEffect(() => {
         socket.on("startGame", (data) => {
@@ -118,6 +124,11 @@ function WaitingRoom() {
             <Box sx={{display:joinStatus? 'block':'none'}}>
                  <h1 style={{color:'white'}}>Waiting for the HOST to start game.</h1>
                 <h1 style={{color:'white'}}>Current Participants: {inLobby}</h1>
+                <Box sx={{display:'flex', justifyContent:'center'}}>
+                    {players.length!=0 && Object.keys(players).map((key,index)=>(
+                        <GenerateAvatar username={players[key]} />
+                    ))}
+                </Box>
             </Box>
         </Box>
     )

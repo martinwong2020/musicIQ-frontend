@@ -59,3 +59,16 @@ export const receiveMultiplayerEndScreen = (callback)=>{
         callback(data);
     })
 }
+
+export const receivePlayers = (callback)=>{
+    socket.on("receivePlayers", (data)=>{
+        console.log("receivePlayers");
+        callback(data);
+    })
+}
+
+export const receivePlayersResponse = (callback)=>{
+    socket.on("receivePlayersResponse",(data)=>{
+        callback(data);
+    })
+}

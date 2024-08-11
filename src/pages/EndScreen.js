@@ -1,6 +1,7 @@
 import { Button , Box} from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import GenerateAvatar from './GenerateAvatar';
 
 function EndScreen() {
     const location = useLocation();
@@ -50,7 +51,7 @@ function EndScreen() {
             {/* <div>Score : {score}</div> */}
             {multiscore && Object.keys(multiscore).length !== 0 && (
                 <Box>
-                    <ol>
+                    <ol >
                         {playersScore.length !== 0 && playersScore.map((score, index) => (
                             <li 
                                 key={index} 
@@ -59,10 +60,14 @@ function EndScreen() {
                                     fontFamily:'Oswald', 
                                     fontOpticalSizing:'auto', 
                                     fontWeight:'530', 
-                                    fontSize:'1.5em'
+                                    fontSize:'1.5em',
+                                    textAlign:'center',
                                 }}
                             >
-                                {score[0]}: {score[1]}
+                                <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                    <GenerateAvatar username={score[0]} />
+                                    {score[0]}: {score[1]}
+                                </div>
                             </li>
                         ))}
                     </ol>

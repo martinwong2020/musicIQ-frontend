@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { checkGameStart, checkRoomAvailability, hostRoom, joinRoom, receiveChoice, sendChoice, socket } from './socket';
+import { checkGameStart, checkRoomAvailability, hostRoom, joinRoom, receiveChoice, receivePlayers, sendChoice, socket } from './socket';
 import { Box } from '@mui/system';
-import { Button, TextField } from '@mui/material';
+import { Avatar, Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { fetchArtist } from './ApiHelper';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
+import GenerateAvatar from "./GenerateAvatar.js";
+
 function GameLobby() {
     const navigate = useNavigate();
     
@@ -19,7 +21,7 @@ function GameLobby() {
     const [insufficientSongs, setInsufficientSongs] = useState(false);
     const [gameStarted,setGameStarted]=useState(false);
     const [username, setUsername] = useState('');
-    
+    const [players,setPlayers] = useState({});
     const fetchGameQuestions = async () =>{
         setLoading(true);
         console.log("inside fetchgame")
@@ -71,6 +73,10 @@ function GameLobby() {
         checkRoomAvailability((data)=>{
             setHostStatus(data);
         })
+        receivePlayers((data)=>{
+            console.log("players",data);
+            setPlayers(data);
+        });
     },[]);
     useEffect(() => {
         socket.on("startGame", (data) => {
@@ -210,6 +216,13 @@ function GameLobby() {
             </Box>
             <Box sx={{display:(hostStatus && !loading)? 'block':'none'}}>
                 <h1 style={{color:'white'}}>Current Participants: {inLobby}</h1>
+                <Box sx={{display:'flex', justifyContent:'center'}}>
+                    {players.length!=0 && Object.keys(players).map((key,index)=>(
+                        
+                        <GenerateAvatar username={players[key]} />
+                    ))}
+                </Box>
+                {/* <GenerateAvatar username={username} /> */}
                 <Button variant='contained'
                     sx={{backgroundColor: '#4caf50',
                         color: 'white',

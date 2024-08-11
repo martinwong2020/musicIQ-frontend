@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { receiveMultiplayerBoard, receiveMultiplayerEndScreen, socket } from './socket';
+import { receiveMultiplayerBoard, receiveMultiplayerEndScreen, receivePlayers, receivePlayersResponse, socket } from './socket';
 import { Box, Typography, Button } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
+import GenerateAvatar from './GenerateAvatar';
+
 function MultiplayerGame() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -15,7 +17,8 @@ function MultiplayerGame() {
     const [correctSong,setCorrectSong] = useState([]);
     const [selectedChoice, setSelectedChoice]= useState(null); 
     const [correctChoice, setCorrectChoice] = useState(null);
-
+    const [players, setPlayers] = useState({});
+    const [playerResponse, setPlayerResponse] = useState({});
     useEffect(() => {
         const handleBeforeUnload = (event) => {
           event.preventDefault();
@@ -47,11 +50,26 @@ function MultiplayerGame() {
         if(songQuestion>=9){
           navigate("/endscreen");
         }
-        setSongQuestion(songQuestion+1);
+        // setSongQuestion(songQuestion+1);
         setSelectedChoice(null);
     }
     useEffect(()=>{
         socket.emit("readyMultiplayerClient",{room});
+        // socket.on("receiveRefreshRequest",(data)=>{
+        //     socket.emit("refreshBoardRequest",{room});
+        // })
+        // socket.on("receiveRefreshBoardRequest",(data)=>{
+        //     console.log("receiveRefreshBoardRequest");
+        //     const user = socket.id;
+        //     socket.emit("recordMultiplayerChoice", {user,room});
+        // })
+        receivePlayers((data)=>{
+            setPlayers(data);
+        })
+        receivePlayersResponse((data)=>{
+            setPlayerResponse(data);
+            console.log("this is the data",data);
+        })
         receiveMultiplayerBoard((data)=>{
             console.log("this is the data",data);
             setSongs(data.songChoices);
@@ -61,11 +79,12 @@ function MultiplayerGame() {
         })
         receiveMultiplayerEndScreen((data)=>{
             navigate("/endscreen",{state:{multiscore:data}});
-        })
+        });
+
     },[]);
-    // useEffect(()=>{
-    //     console.log("correct song",correctSong);
-    // },[correctSong]);
+    useEffect(()=>{
+        console.log("players",players);
+    },[players]);
     return (
         <Box sx={{
             textAlign: 'center',
@@ -89,9 +108,21 @@ function MultiplayerGame() {
                 </Box>
             )}
             
+            <Box sx={{display:'flex', justifyContent:'center'}}>
+                {players.length!=0 && Object.keys(players).map((key,index)=>{
+                    const playerAnswers =playerResponse[key];
+                    const borderColor = playerAnswers && (songQuestion)< playerAnswers.length ? playerAnswers[songQuestion] ? 'green' :'red' :'transparent';
+                    console.log("inside border",borderColor,songQuestion);
+                    return (
+                        <div key={key} style={{borderBottom:`10px solid ${borderColor}`,margin: '0 10px'}}>
+                            <GenerateAvatar username={players[key]} />
+                        </div>
+                    )
+                })}
+            </Box>
 
             <Box backgroundColor="black" alignItems="center">
-                {correctSong.length!=0 && songs.length!=0 &&(
+                {correctSong&& songs && correctSong.length!=0 && songs.length!=0 &&(
                     <Box display="flex" alignItems="center" >
                         {songs.map((song,index)=>(
                         <Card 
