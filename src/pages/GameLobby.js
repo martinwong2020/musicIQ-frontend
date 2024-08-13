@@ -7,7 +7,7 @@ import { fetchArtist } from './ApiHelper';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 import GenerateAvatar from "./GenerateAvatar.js";
-
+import '../css/scrollbar.css'
 function GameLobby() {
     const navigate = useNavigate();
     
@@ -214,9 +214,9 @@ function GameLobby() {
                 >Host Room</Button>
 
             </Box>
-            <Box sx={{display:(hostStatus && !loading)? 'block':'none'}}>
+            <Box sx={{display:(hostStatus && !loading)? 'flex':'none',flexDirection:'column',alignItems:'center'}}>
                 <h1 style={{color:'white'}}>Current Participants: {inLobby}</h1>
-                <Box sx={{display:'flex', justifyContent:'center'}}>
+                <Box sx={{display:'flex', justifyContent:(Object.keys(players).length>=5)?'flex-start':'center', width:'280px',overflowX:(Object.keys(players).length>=5)?'scroll':'none'}}>
                     {players.length!=0 && Object.keys(players).map((key,index)=>(
                         
                         <GenerateAvatar username={players[key]} />

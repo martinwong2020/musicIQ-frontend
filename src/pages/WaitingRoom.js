@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { checkRoomExist, joinRoom, socket, receivePlayers } from './socket';
 import { useNavigate } from 'react-router-dom';
 import GenerateAvatar from './GenerateAvatar';
+import '../css/scrollbar.css'
 
 function WaitingRoom() {
     const navigate = useNavigate();
@@ -85,7 +86,8 @@ function WaitingRoom() {
                     '& .MuiInput-underline:after': {
                     borderBottomColor: 'white',
                     },
-                    display:joinStatus?'none':'block'
+                    display:joinStatus?'none':'block',
+                    marginTop:'20px'
                 }} 
             />
              <TextField id="outlined-basic" label="Username" variant='standard' onChange={(e)=>{setUsername(e.target.value)}}
@@ -108,7 +110,8 @@ function WaitingRoom() {
                     '& .MuiInput-underline:after': {
                     borderBottomColor: 'white',
                     },
-                    display:joinStatus?'none':'block'
+                    display:joinStatus?'none':'block',
+                    marginTop:'20px'
                 }} 
             />
             <Button variant='contained'
@@ -117,14 +120,15 @@ function WaitingRoom() {
                     '&:hover': {
                         backgroundColor: '#388e3c', // Darker green on hover
                     },
-                    display:joinStatus?'none':'block'
+                    display:joinStatus?'none':'block',
+                    marginTop:'20px'
                 }}
                 onClick={()=>{checkField();}}
             >Join Room</Button>
-            <Box sx={{display:joinStatus? 'block':'none'}}>
+            <Box sx={{display:joinStatus? 'flex':'none', justifyContent:'center', flexDirection:'column', alignItems:'center'}}>
                  <h1 style={{color:'white'}}>Waiting for the HOST to start game.</h1>
                 <h1 style={{color:'white'}}>Current Participants: {inLobby}</h1>
-                <Box sx={{display:'flex', justifyContent:'center'}}>
+                <Box sx={{display:'flex', justifyContent:(Object.keys(players).length>=5)?'flex-start':'center', width:'280px',overflowX:(Object.keys(players).length>=5)?'scroll':'none'}}>
                     {players.length!=0 && Object.keys(players).map((key,index)=>(
                         <GenerateAvatar username={players[key]} />
                     ))}

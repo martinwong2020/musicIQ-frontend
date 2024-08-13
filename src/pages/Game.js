@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../css/style.css'
 import { connectSocket } from './socket';
 import { fetchArtist } from './ApiHelper';
+import CustomAudioPlayer from './CustomAudio';
 function Game() {
   const location = useLocation();
   const audioRef = useRef(null);
@@ -231,10 +232,11 @@ function Game() {
       </Box>
       {quizSong.length!=0 &&(
         <Box>
-          <audio controls key={quizSong[songIndex].preview}>
+          {/* <audio controls key={quizSong[songIndex].preview}>
             <source src={quizSong[songIndex].preview} type="audio/mpeg"/>
             
-          </audio>
+          </audio> */}
+          <CustomAudioPlayer src={quizSong[songIndex].preview} />
           {/* <h1>{quizSong[songIndex]["title"]}</h1> */}
         </Box>
       )}

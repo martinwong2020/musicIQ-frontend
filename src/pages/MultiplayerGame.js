@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import GenerateAvatar from './GenerateAvatar';
+import CustomAudioPlayer from './CustomAudio';
 
 function MultiplayerGame() {
     const navigate = useNavigate();
@@ -39,9 +40,6 @@ function MultiplayerGame() {
         }
         setSelectedChoice(index);
         setCorrectChoice(song === correctSong["title"]);
-        // if(song === correctSong[0].title){
-        //     setCorrectAnswers(correctAnswers+1);
-        // }
         const user = socket.id;
         const correct = song === correctSong["title"]
         socket.emit("recordMultiplayerChoice", {user,room,correct});
@@ -55,14 +53,6 @@ function MultiplayerGame() {
     }
     useEffect(()=>{
         socket.emit("readyMultiplayerClient",{room});
-        // socket.on("receiveRefreshRequest",(data)=>{
-        //     socket.emit("refreshBoardRequest",{room});
-        // })
-        // socket.on("receiveRefreshBoardRequest",(data)=>{
-        //     console.log("receiveRefreshBoardRequest");
-        //     const user = socket.id;
-        //     socket.emit("recordMultiplayerChoice", {user,room});
-        // })
         receivePlayers((data)=>{
             setPlayers(data);
         })
@@ -102,13 +92,11 @@ function MultiplayerGame() {
           }}>
             {correctSong && correctSong.preview && (
                 <Box>
-                    <audio controls key={correctSong.preview}>
-                        <source src={correctSong.preview} type="audio/mpeg"/>
-                    </audio>
+                    <CustomAudioPlayer src={correctSong.preview} />
                 </Box>
             )}
             
-            <Box sx={{display:'flex', justifyContent:'center'}}>
+            <Box sx={{display:'flex', justifyContent:(Object.keys(players).length>=5)?'flex-start':'center', width:'280px',overflowX:(Object.keys(players).length>=5)?'scroll':'none'}}>
                 {players.length!=0 && Object.keys(players).map((key,index)=>{
                     const playerAnswers =playerResponse[key];
                     const borderColor = playerAnswers && (songQuestion)< playerAnswers.length ? playerAnswers[songQuestion] ? 'green' :'red' :'transparent';
