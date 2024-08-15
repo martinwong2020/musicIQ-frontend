@@ -47,24 +47,6 @@ function Game() {
   const [correctAnswers, setCorrectAnswers] = useState(savedState.correctAnswers || 0);
   const [insufficientSongs, setInsufficientSongs] = useState(savedState.insufficientSongs || false);
   
-  // useEffect(() => {
-  //   const savedState = JSON.parse(sessionStorage.getItem('quizState'));
-  //   if (savedState) {
-  //       setArtist(savedState.artist);
-  //       setSongs(savedState.songs);
-  //       setQuizSong(savedState.quizSong);
-  //       setRemainingSong(savedState.remaingingSong);
-  //       setError(savedState.error);
-  //       setLoading(savedState.loading);
-  //       setSongIndex(savedState.songIndex);
-  //       setSongChoices(savedState.songChoices);
-  //       setCorrectChoice(savedState.correctChoice);
-  //       setSelectedChoice(savedState.selectedChoice);
-  //       setSearchedArtist(savedState.searchedArtist);
-  //       setCorrectAnswers(savedState.correctAnswers);
-  //       setInsufficientSongs(savedState.insufficientSongs);
-  //   }
-  // }, []);
   useEffect(() => {
     const state = {
         artist,
@@ -262,7 +244,6 @@ function Game() {
                   width: '180px' , 
                   flexShrink: 0,
                   '&:hover':{
-                    // boxShadow:'0px 0px 20px 5px aliceblue'
                     boxShadow: (selectedChoice==null) ? "0px 0px 20px 5px aliceblue " :(selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none' ,
                   },
                   boxShadow: (selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none',

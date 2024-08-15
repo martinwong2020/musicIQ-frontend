@@ -17,8 +17,6 @@ function App() {
         <Route path="/gamelobby" element = {<GameLobby />} />
         <Route path="/waitingroom" element = {<WaitingRoom />} />
         <Route path="/multiplayer" element ={<MultiplayerGame />} />
-        {/* <Route path="/game" element={<Game />} />
-        <Route path="/leaderboard" element={<Leaderboard />} /> */}
       </Routes>
     </Router>
   );

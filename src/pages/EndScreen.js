@@ -20,7 +20,6 @@ function EndScreen() {
             players[username]=score;
         }
         const sortedScoresArray = Object.entries(players).sort(([, scoreA], [, scoreB]) => scoreB - scoreA);
-        // players.sort((a,b)=>a[username]-b[username]);
         console.log("sorted",sortedScoresArray);
         setPlayersScore(sortedScoresArray);
     }
@@ -48,7 +47,6 @@ function EndScreen() {
                     <h1 style={{color:'white'}}>Score :{score}</h1>
                 </Box>
             )}
-            {/* <div>Score : {score}</div> */}
             {multiscore && Object.keys(multiscore).length !== 0 && (
                 <Box>
                     <ol >
