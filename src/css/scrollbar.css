@@ -1,10 +1,11 @@
 /* For Webkit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-    height: 7px; /* Width of the scrollbar */
+    height: 7px;
+    width:7px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #030303; /* Background color of the track */
+    background: #616161; /* Background color of the track */
     border-radius: 10px;
 }
 

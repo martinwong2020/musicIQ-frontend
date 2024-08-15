@@ -24,13 +24,15 @@ function GameLobby() {
     const [players,setPlayers] = useState({});
     const fetchGameQuestions = async () =>{
         setLoading(true);
+        setError('');
         console.log("inside fetchgame")
         try{
             const artistId = await fetchArtist(artist);
             if (!artistId) {
                 console.log("inside no artist")
                 setError('Artist not found');
-                return;
+                setLoading(false);
+                return false;
             }
 
             const tracksResponse = await axios.get(`http://localhost:5000/artist/${artistId}/random`);
@@ -38,7 +40,9 @@ function GameLobby() {
             if(tracksResponse.data.length<15){
                 setInsufficientSongs(true);
                 setLoading(false);
-                return;
+                setError("Artist has too little songs.");
+                console.log('less than 15');
+                return false;
             }
             const songs =tracksResponse.data;
             let quizSongs=[];
@@ -59,9 +63,12 @@ function GameLobby() {
             console.error("Error fetching songs:", error);
             setError('Error fetching songs');
             setLoading(false);
+            return false;
         }
         setLoading(false);
+        setError('');
         console.log("finish fetch");
+        return true;
     }
     const handleStartGame = ()=>{
         socket.emit("gameStart",room);
@@ -91,7 +98,7 @@ function GameLobby() {
             socket.off("startGame");
         };
     }, [room, navigate]);
-    const checkFields = () =>{
+    const checkFields = async() =>{
         if(room==""){
             setFieldError(true);
             return;
@@ -104,8 +111,15 @@ function GameLobby() {
             setFieldError(true);
             return;
         }
-        hostRoom(room,username);
-        fetchGameQuestions();
+        // if(fetchGameQuestions()){
+        //     console.log("in fetching host");
+        //     hostRoom(room,username);
+        // }
+        const fetchStatus = await fetchGameQuestions();
+        if(fetchStatus){
+            hostRoom(room,username);
+        }
+        
     }
     return (
         <Box sx={{
@@ -125,6 +139,12 @@ function GameLobby() {
             <div style={{ display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <ReactLoading type="bars" color="#388e3c" height={80} width={80} />
             </div>
+
+            <Box>
+                {(error!='') && (
+                    <h1 style={{color:'white'}}>{error}</h1>
+                )}
+            </Box>
             <Box sx={{
                 display: (hostStatus || loading) ? "none": 'flex',
                 flexDirection: 'column',

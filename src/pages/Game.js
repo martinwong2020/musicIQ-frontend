@@ -114,12 +114,15 @@ function Game() {
     }
     setSearchedArtist(true);
     setLoading(true);
+    setError('');
       try {
           // Fetch artist ID
           const artistId = await fetchArtist(artist);
 
           if (!artistId) {
               setError('Artist not found');
+              setLoading(false);
+              setSearchedArtist(false);
               return;
           }
 
@@ -128,9 +131,10 @@ function Game() {
           if(tracksResponse.data.length<15){
             // setError("Less than 15 songs");
             setInsufficientSongs(true);
-            console.log("less than 15songs");
+            console.log("Artist has less than 15 songs.");
             setSearchedArtist(false);
             setLoading(false);
+            setError('Artist does has less than 15 songs to use.');
             return;
           }
           setSongs(tracksResponse.data);
@@ -140,6 +144,7 @@ function Game() {
           console.error("Error fetching songs:", error);
           setError('Error fetching songs');
       }
+    setError('');
     setLoading(false);
   };
   const ShuffleSongChoices = ()=>{
@@ -196,7 +201,14 @@ function Game() {
       <div style={{ display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <ReactLoading type="bars" color="#388e3c" height={80} width={80} />
       </div>
+      <Box>
+        {(error!='') &&(
+          <h1 style={{color:'white'}}>{error}</h1>
+        )}
+      </Box>
       <Box sx={{display:searchedArtist? 'none':'flex', flexDirection:'column'}}>
+
+        
         <TextField id="outlined-basic" label="Artist" variant='standard' onChange={(e)=>{setArtist(e.target.value)}}
           sx={{
             '& .MuiInputBase-input': {
@@ -227,41 +239,62 @@ function Game() {
           },}}
         >Search</Button>
       </Box>
-      <Box sx={{display:insufficientSongs ? 'block' :'none'}}>
-        <h1>Sorry the following artist you have searched has less than 15 songs to be used for the game. Please try again with a new artist.</h1>
-      </Box>
       {quizSong.length!=0 &&(
         <Box>
-          {/* <audio controls key={quizSong[songIndex].preview}>
-            <source src={quizSong[songIndex].preview} type="audio/mpeg"/>
-            
-          </audio> */}
           <CustomAudioPlayer src={quizSong[songIndex].preview} />
-          {/* <h1>{quizSong[songIndex]["title"]}</h1> */}
         </Box>
       )}
       
-      <Box backgroundColor="black" alignItems="center">
+      <Box alignItems="center" sx={{ width:'100vw'}}>
         {songs.length!=0 && quizSong.length!=0 && remaingingSong.length!=0 &&(
-          <Box display="flex" alignItems="center" >
+          <Box display="flex" justifyContent="center" alignItems="center"
+            flexWrap='wrap'
+            sx={{
+              height:'50vh',
+              overflowY:'auto',
+              width:'100%',
+            }}
+          >
             {songChoices.map((song,index)=>(
               <Card 
                 key={index} 
                 sx={{ 
-                  maxWidth: 345 , 
-                  border: (selectedChoice===index) ? correctChoice ? 'green 2px solid' : 'red 2px solid' : 'none'
+                  width: '180px' , 
+                  flexShrink: 0,
+                  '&:hover':{
+                    // boxShadow:'0px 0px 20px 5px aliceblue'
+                    boxShadow: (selectedChoice==null) ? "0px 0px 20px 5px aliceblue " :(selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none' ,
+                  },
+                  boxShadow: (selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none',
+                  backgroundColor:'white',
+                  padding:'7px',
+                  borderRadius:'15px',
+                  margin:'10px',
                 }}>
                 <CardActionArea onClick={(e)=>{
                   checkSongChoice(song["title"],index);
                 }}>
                   <CardMedia 
                     component="img"
-                    height="200"
+                    height="180px"
                     image={song["album"]["cover_big"]}
+                    sx={{
+                      borderRadius:'15px'
+                    }}
                   />
-                  <CardContent sx={{backgroundColor:'#020202',color:'white'}}>
-                    <Typography gutterBottom variant="h5" component="div" >
-                      {song["title"]}
+                  <CardContent sx={{color:'#020202'}}>
+                    <Typography gutterBottom variant="h5" component="div" 
+                      sx={{
+                        height:'clamp(40px, 50px , 50px)',
+                        fontSize: 'clamp(11px, 1.2rem, 1.5rem)',
+                        display:'flex',
+                        justifyContent:'center',
+                        alignItems:'center',
+                        fontWeight:'700',
+                        overflowY:'auto'
+                      }}
+                    >
+                      {song["title"]} 
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -269,8 +302,9 @@ function Game() {
             ))}
           </Box>
         )}    
-        <Button variant='contained'sx={{display: (selectedChoice!=null) ? 'block':'none'}} onClick={()=>{resetChoices()}}>Continue</Button>
+        
       </Box>
+      <Button variant='contained'sx={{display: (selectedChoice!=null) ? 'block':'none'}} onClick={()=>{resetChoices()}}>Continue</Button>
     </Box>
   )
 }

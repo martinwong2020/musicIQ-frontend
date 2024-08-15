@@ -109,15 +109,31 @@ function MultiplayerGame() {
                 })}
             </Box>
 
-            <Box backgroundColor="black" alignItems="center">
+            <Box alignItems="center" sx={{height:'400px', width:'100vw'}}>
                 {correctSong&& songs && correctSong.length!=0 && songs.length!=0 &&(
-                    <Box display="flex" alignItems="center" >
+                    <Box display="flex" justifyContent="center" alignItems="center"
+                        flexWrap='wrap'
+                        sx={{
+                        height:'40vh',
+                        overflowY:'auto',
+                        width:'100%',
+                        }}
+                    >
                         {songs.map((song,index)=>(
                         <Card 
                             key={index} 
                             sx={{ 
-                            maxWidth: 345 , 
-                            border: (selectedChoice===index) ? correctChoice ? 'green 2px solid' : 'red 2px solid' : 'none'
+                                width: '180px' , 
+                                flexShrink: 0,
+                                '&:hover':{
+                                    // boxShadow:'0px 0px 20px 5px aliceblue'
+                                    boxShadow: (selectedChoice==null) ? "0px 0px 20px 5px aliceblue " :(selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none' ,
+                                },
+                                boxShadow: (selectedChoice === index) ? correctChoice ? '0px 0px 20px 5px green' :'0px 0px 20px 5px red' : 'none',
+                                backgroundColor:'white',
+                                padding:'7px',
+                                borderRadius:'15px',
+                                margin:'10px',
                             }}>
                             <CardActionArea onClick={(e)=>{
                                 checkSongChoice(song["title"],index);
@@ -126,9 +142,22 @@ function MultiplayerGame() {
                                 component="img"
                                 height="200"
                                 image={song["album"]["cover_big"]}
+                                sx={{
+                                    borderRadius:'15px'
+                                }}
                             />
-                            <CardContent sx={{backgroundColor:'#020202',color:'white'}}>
-                                <Typography gutterBottom variant="h5" component="div" >
+                            <CardContent sx={{color:'#020202'}}>
+                                <Typography gutterBottom variant="h5" component="div"
+                                sx={{
+                                    height:'clamp(40px, 50px , 50px)',
+                                    fontSize: 'clamp(11px, 1.2rem, 1.5rem)',
+                                    display:'flex',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    fontWeight:'700',
+                                    overflowY:'auto'
+                                }}
+                                >
                                 {song["title"]}
                                 </Typography>
                             </CardContent>
