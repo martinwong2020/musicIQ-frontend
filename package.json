@@ -1,7 +1,7 @@
 {
   "name": "musiciq",
   "version": "0.1.0",
-  "homepage": "http://martinwong2020.github.io/musicIQ-frontend",
+  "homepage": "https://martinwong2020.github.io/musicIQ-frontend",
   "private": false,
   "dependencies": {
     "@dicebear/collection": "^9.2.1",
