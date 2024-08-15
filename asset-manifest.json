@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/musicIQ-frontend/static/css/main.ec26dbd1.css",
-    "main.js": "/musicIQ-frontend/static/js/main.22577b4a.js",
+    "main.js": "/musicIQ-frontend/static/js/main.4bf98165.js",
     "static/media/vinyl-128.png": "/musicIQ-frontend/static/media/vinyl-128.e3cc4b497f7332a02cac.png",
     "index.html": "/musicIQ-frontend/index.html",
     "main.ec26dbd1.css.map": "/musicIQ-frontend/static/css/main.ec26dbd1.css.map",
-    "main.22577b4a.js.map": "/musicIQ-frontend/static/js/main.22577b4a.js.map"
+    "main.4bf98165.js.map": "/musicIQ-frontend/static/js/main.4bf98165.js.map"
   },
   "entrypoints": [
     "static/css/main.ec26dbd1.css",
-    "static/js/main.22577b4a.js"
+    "static/js/main.4bf98165.js"
   ]
 }
