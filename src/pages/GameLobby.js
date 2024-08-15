@@ -10,7 +10,7 @@ import GenerateAvatar from "./GenerateAvatar.js";
 import '../css/scrollbar.css'
 function GameLobby() {
     const navigate = useNavigate();
-    
+    const backendURL= process.env.REACT_APP_BACKEND_URL;
     const [room,setRoom] =useState('');
     const [artist, setArtist]=useState("");
     const [fieldError,setFieldError]= useState(false);
@@ -35,7 +35,7 @@ function GameLobby() {
                 return false;
             }
 
-            const tracksResponse = await axios.get(`http://localhost:5000/artist/${artistId}/random`);
+            const tracksResponse = await axios.get(`${backendURL}/artist/${artistId}/random`);
             console.log("after axios")
             if(tracksResponse.data.length<15){
                 setInsufficientSongs(true);

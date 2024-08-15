@@ -12,24 +12,12 @@ import { connectSocket } from './socket';
 import { fetchArtist } from './ApiHelper';
 import CustomAudioPlayer from './CustomAudio';
 function Game() {
+  const backendURL= process.env.REACT_APP_BACKEND_URL
   const location = useLocation();
   const audioRef = useRef(null);
   const navigate = useNavigate();
 
   const passedArtist = location.state?.artist
-  // const [artist, setArtist]=useState('');
-  // const [songs,setSongs]=useState([]);
-  // const [quizSong,setQuizSong] = useState([]);
-  // const [remaingingSong, setRemainingSong]= useState([]);
-  // const [error, setError]=useState('');
-  // const [loading, setLoading] = useState(false);
-  // const [songIndex,setSongIndex]=useState(0);
-  // const [songChoices,setSongChoices]=useState([]);
-  // const [correctChoice, setCorrectChoice]= useState(null);
-  // const [selectedChoice, setSelectedChoice]= useState(null); 
-  // const [searchedArtist, setSearchedArtist] = useState(false);
-  // const [correctAnswers, setCorrectAnswers] = useState(0);
-  // const [insufficientSongs, setInsufficientSongs] = useState(false);
 
   const savedState = JSON.parse(sessionStorage.getItem('quizState')) || {};
 
@@ -109,7 +97,7 @@ function Game() {
           }
 
           // Fetch top 10 tracks for the artist
-          const tracksResponse = await axios.get(`http://localhost:5000/artist/${artistId}/random`);
+          const tracksResponse = await axios.get(`${backendURL}/artist/${artistId}/random`);
           if(tracksResponse.data.length<15){
             // setError("Less than 15 songs");
             setInsufficientSongs(true);
