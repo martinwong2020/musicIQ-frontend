@@ -7,6 +7,7 @@ function CustomAudioPlayer({ src }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [volume, setVolume] = useState(0.5);
+  const [initialPlay, setInitialPlay]=useState(true);
   useEffect(() => {
     let animationFrameId;
 
@@ -30,10 +31,34 @@ function CustomAudioPlayer({ src }) {
       setIsPlaying(0);
     }
   },[src]);
+  useEffect(()=>{
+    const handleTimeLimit = ()=>{
+      if(audioRef.current.currentTime>=30){
+        console.log("hereeeeee");
+        audioRef.current.pause();
+        setIsPlaying(false);
+        setInitialPlay(true);
+      }
+    };
+
+    if(audioRef.current){
+      audioRef.current.addEventListener('timeupdate',handleTimeLimit);
+    };
+
+    return ()=>{
+      if(audioRef.current){
+        audioRef.current.removeEventListener('timeupdate',handleTimeLimit);
+      }
+    }
+  },[]);
   const handlePlayPause = () => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
+      if(initialPlay){
+        audioRef.current.currentTime=25;
+        setInitialPlay(false);
+      }
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
