@@ -28,12 +28,15 @@ function CustomAudioPlayer({ src }) {
   }, [isPlaying, rotation]);
   useEffect(()=>{
     if(audioRef.current){
-      setIsPlaying(0);
+      setIsPlaying(false);
+      audioRef.current.pause();
+      setInitialPlay(true);
+      audioRef.current.currentTime = 25;
     }
   },[src]);
   useEffect(()=>{
     const handleTimeLimit = ()=>{
-      if(audioRef.current.currentTime>=30){
+      if(audioRef.current.currentTime>=29.9){
         console.log("hereeeeee");
         audioRef.current.pause();
         setIsPlaying(false);
@@ -58,6 +61,10 @@ function CustomAudioPlayer({ src }) {
       if(initialPlay){
         audioRef.current.currentTime=25;
         setInitialPlay(false);
+      }
+      if(audioRef.current.currentTime<25){
+        console.log("less than");
+        audioRef.current.currentTime=25;
       }
       audioRef.current.play();
     }

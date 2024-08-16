@@ -153,7 +153,7 @@ function MultiplayerGame() {
                                     fontSize: 'clamp(11px, 1.2rem, 1.5rem)',
                                     display:'flex',
                                     justifyContent:'center',
-                                    alignItems:'center',
+                                    alignItems:'flex-start',
                                     fontWeight:'700',
                                     overflowY:'auto'
                                 }}

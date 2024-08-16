@@ -14,7 +14,6 @@ import CustomAudioPlayer from './CustomAudio';
 function Game() {
   const backendURL= process.env.REACT_APP_BACKEND_URL
   const location = useLocation();
-  const audioRef = useRef(null);
   const navigate = useNavigate();
 
   const passedArtist = location.state?.artist
@@ -258,7 +257,7 @@ function Game() {
                         fontSize: 'clamp(11px, 1.2rem, 1.5rem)',
                         display:'flex',
                         justifyContent:'center',
-                        alignItems:'center',
+                        alignItems:'flex-start',
                         fontWeight:'700',
                         overflowY:'auto'
                       }}
