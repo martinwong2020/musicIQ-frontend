@@ -10,7 +10,14 @@ function Home() {
     return (
         <div style={{backgroundColor:'#161616', height:'100vh', width:'100vw', margin:0, display:'flex', justifyContent:'center', alignItems:'center'}}>
             <Container style={{ textAlign: 'center'}}>
-                <Typography variant="h4" gutterBottom sx={{color:'#e6e6e6', fontFamily:'Oswald', fontOpticalSizing:'auto', fontWeight:'530', fontSize:'3.5em'}}>Welcome to Music<span style={{color:"#4caf50"}}>IQ</span></Typography>
+                <Typography variant="h4" gutterBottom sx={{color:'#e6e6e6', fontFamily:'Oswald', fontOpticalSizing:'auto', fontWeight:'530', fontSize:'3.5em'}}>
+                    Welcome to Music
+                    <span style={{
+                        color:"#ceddce", 
+                        textShadow:`0 0 7px #fff,0 0 15px #35ba5a,0 0 20px #35ba5a,0 0 25px #35ba5a`
+                        }}
+                    >IQ</span>
+                </Typography>
 
                 <Box
                     display="flex"
